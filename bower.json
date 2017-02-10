@@ -1,0 +1,28 @@
+{
+  "name": "ImageUploadForm",
+  "authors": [
+    "Alexey Zauzin <lehadnk@gmail.com>"
+  ],
+  "description": "Responsive image upload form with multiple upload capacities.",
+  "main": "ImageUploadForm.js",
+  "keywords": [
+    "image",
+    "upload",
+    "form",
+    "multiple"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "AdminLTE": "admin-lte#^2.3.11",
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7"
+  }
+}
