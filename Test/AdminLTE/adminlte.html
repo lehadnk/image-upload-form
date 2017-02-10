@@ -18,7 +18,12 @@
     <script type="text/javascript">
         $(function(){
             $('#form1').imageUploadForm();
-            $('#form2').imageUploadForm();
+            $('#form2').imageUploadForm({
+                'text': {
+                    'formHeader': 'Загрузка изображений',
+                    'deleteButton': 'Удалить'
+                }
+            });
         });
     </script>
 </head>
