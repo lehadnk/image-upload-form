@@ -3,6 +3,14 @@
  */
 (function($) {
 
+    var serviceVars = {
+        'imageContainerClass': 'iuf-image-container',
+        'footerHintClass': 'iuf-footer-hint',
+        'imagePatternClass': 'iuf-image-pattern',
+        'imageThumbContainer': 'iuf-image-thumb-container',
+        'pluginContainer': 'iuf-plugin-container',
+    };
+
     function uploadImage() {
         var formData = new FormData();
         formData.append('file', $(this)[0].files[0]);
@@ -15,11 +23,16 @@
             data : formData,
             processData: false,
             contentType: false,
+            dataType: 'json',
+            context: this,
             success : function(data) {
-                console.log(data);
-                alert(data);
-            }
+                addImage(getImageContainer(this), data.src);
+            }.bind(this)
         });
+    }
+
+    function getImageContainer(element) {
+        return $($(element).parents('.'+serviceVars.pluginContainer)[0]).find('.'+serviceVars.imageContainerClass)[0];
     }
 
     function createElement(container, element, htmlClass) {
@@ -36,13 +49,7 @@
 
     function renderPreloadImages(container, images, settings, styles) {
         images.each(function(key, image){
-            var imageContainer = createElement(container, '<div></div>', styles.content.thumb.container);
-            var thumbContainer = createElement(imageContainer, '<div></div>', styles.content.thumb.thumbContainer);
-            $(image).appendTo(thumbContainer).addClass(styles.content.thumb.thumb).show();
-
-            var footerContainer = createElement(imageContainer, '<div></div>', styles.content.thumb.footerContainer);
-            var footerButtonsContainer = createElement(footerContainer, '<div></div>', styles.content.thumb.footerButtonsContainer);
-            createElement(footerButtonsContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
+            addImage(container, image);
         });
     }
 
@@ -51,32 +58,59 @@
         return images.length+' images total, <b>3.14 Mb</b>';
     }
 
+    function addImage(container, image) {
+        if (typeof image !== 'object') {
+            image = $('<img>').attr('src', image);
+        }
+        var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone();
+        newImageContainer.appendTo(container);
+        $(image).appendTo(newImageContainer.children('.'+serviceVars.imageThumbContainer)[0]);
+        $(image).show();
+        newImageContainer.removeClass(serviceVars.imagePatternClass);
+    }
+
     function renderUI(container, settings) {
         var preloadImages = getPreloadImages(container);
 
         var styles = settings.style;
 
-        var header = createElement(container, '<div></div>', styles.header.container);
-        createElement(header, '<h3>'+settings.text.formHeader+'</h3>', styles.header.header);
-        var headerButtonsContainer = createElement(header, '<div></div>', styles.header.buttonsContainer);
-        var uploadButton = createElement(headerButtonsContainer, '<input type="file"></input>', styles.header.addImageButton);
-        $(uploadButton).on('change', uploadImage);
-        $(uploadButton).data('url', settings.uploadUrl);
+        // <Header>
+            var header = createElement(container, '<div></div>', styles.header.container);
+            createElement(header, '<h3>'+settings.text.formHeader+'</h3>', styles.header.header);
+            var headerButtonsContainer = createElement(header, '<div></div>', styles.header.buttonsContainer);
+            var uploadButton = createElement(headerButtonsContainer, '<input type="file"></input>', styles.header.addImageButton);
+            $(uploadButton).on('change', uploadImage);
+            $(uploadButton).data('url', settings.uploadUrl);
+        // </Header>
 
-        var body = createElement(container, '<div></div>', styles.content.container);
-        var row = createElement(body, '<div></div>', styles.content.row).addClass(settings.imageContainerClass);
+        // <Body>
+            var body = createElement(container, '<div></div>', styles.content.container);
+            var row = createElement(body, '<div></div>', styles.content.row).addClass(serviceVars.imageContainerClass);
 
-        if (preloadImages.length == 0) {
-            $(body).hide();
-        } else {
-            renderPreloadImages(row, preloadImages, settings, styles);
-        }
+            // Image pattern
+                var imagePatternContainer = createElement(row, '<div></div>', styles.content.thumb.container).addClass(serviceVars.imagePatternClass);
+                createElement(imagePatternContainer, '<div></div>', styles.content.thumb.thumbContainer).addClass(serviceVars.imageThumbContainer);
 
-        var footer = createElement(container, '<div></div>', styles.footer.container);
-        $('<p>'+getTotalText(container, settings)+'</p>').prependTo(footer).addClass(styles.footer.infoBlock).addClass(settings.footerHintClass);
+                var footerContainer = createElement(imagePatternContainer, '<div></div>', styles.content.thumb.footerContainer);
+                var footerButtonsContainer = createElement(footerContainer, '<div></div>', styles.content.thumb.footerButtonsContainer);
+                createElement(footerButtonsContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
+            // !Image pattern
+
+            if (preloadImages.length == 0) {
+                $(body).hide();
+            } else {
+                renderPreloadImages(row, preloadImages, settings, styles);
+            }
+        // </Body>
+
+        // <Footer>
+            var footer = createElement(container, '<div></div>', styles.footer.container);
+            $('<p>'+getTotalText(container, settings)+'</p>').prependTo(footer).addClass(styles.footer.infoBlock).addClass(serviceVars.footerHintClass);
+        // </Footer>
     }
 
     function render(container, settings) {
+        $(container).addClass(serviceVars.pluginContainer);
         renderUI(container, settings);
     }
 
@@ -107,8 +141,6 @@
                     'infoBlock': 'help-block'
                 }
             },
-            'imageContainerClass': 'iuf-image-container',
-            'footerHintClass': 'iuf-footer-hint',
             'text': {
                 'formHeader': 'Image Upload',
                 'deleteButton': 'Delete',

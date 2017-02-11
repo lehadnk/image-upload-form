@@ -17,3 +17,7 @@
 .iuf-thumb-container {
     margin-top: 3px;
 }
+
+.iuf-image-pattern {
+    display: none;
+}
