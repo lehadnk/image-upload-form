@@ -3,6 +3,25 @@
  */
 (function($) {
 
+    function uploadImage() {
+        var formData = new FormData();
+        formData.append('file', $(this)[0].files[0]);
+
+        var url = $(this).data('url');
+
+        $.ajax({
+            url : url,
+            type : 'POST',
+            data : formData,
+            processData: false,
+            contentType: false,
+            success : function(data) {
+                console.log(data);
+                alert(data);
+            }
+        });
+    }
+
     function createElement(container, element, htmlClass) {
         return $(element).appendTo(container).addClass(htmlClass);
     }
@@ -40,7 +59,9 @@
         var header = createElement(container, '<div></div>', styles.header.container);
         createElement(header, '<h3>'+settings.text.formHeader+'</h3>', styles.header.header);
         var headerButtonsContainer = createElement(header, '<div></div>', styles.header.buttonsContainer);
-        createElement(headerButtonsContainer, '<input type="file"></input>', styles.header.addImageButton);
+        var uploadButton = createElement(headerButtonsContainer, '<input type="file"></input>', styles.header.addImageButton);
+        $(uploadButton).on('change', uploadImage);
+        $(uploadButton).data('url', settings.uploadUrl);
 
         var body = createElement(container, '<div></div>', styles.content.container);
         var row = createElement(body, '<div></div>', styles.content.row).addClass(settings.imageContainerClass);
@@ -92,7 +113,9 @@
                 'formHeader': 'Image Upload',
                 'deleteButton': 'Delete',
                 'total': '{0} images total, <b>{1}</b>'
-            }
+            },
+            'uploadUrl': '',
+            'deleteUrl': '',
         }, options);
 
         render(this, settings);
