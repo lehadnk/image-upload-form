@@ -64,7 +64,7 @@
     function createThumbContainer(container) {
         var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone();
         newImageContainer.appendTo(container);
-        newImageContainer.removeClass(serviceVars.imagePatternClass).hide().show('slow');
+        newImageContainer.removeClass(serviceVars.imagePatternClass).hide().fadeIn('slow');
 
         return newImageContainer;
     }
