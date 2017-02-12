@@ -17,6 +17,9 @@
 
         var url = $(this).data('url');
 
+        var placeholderContainer = createThumbContainer(getImageContainer(this));
+        addLoadingOverlay(placeholderContainer);
+
         $.ajax({
             url : url,
             type : 'POST',
@@ -24,9 +27,9 @@
             processData: false,
             contentType: false,
             dataType: 'json',
-            context: this,
             success : function(data) {
-                addImage(getImageContainer(this), data.src);
+                removeLoadingOverlay(placeholderContainer);
+                addImageToThumbContainer(placeholderContainer, srcToImg(data.src));
             }.bind(this)
         });
     }
@@ -49,7 +52,7 @@
 
     function renderPreloadImages(container, images, settings, styles) {
         images.each(function(key, image){
-            addImage(container, image);
+            createThumbnail(container, image);
         });
     }
 
@@ -58,15 +61,39 @@
         return images.length+' images total, <b>3.14 Mb</b>';
     }
 
-    function addImage(container, image) {
-        if (typeof image !== 'object') {
-            image = $('<img>').attr('src', image);
-        }
+    function createThumbContainer(container) {
         var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone();
         newImageContainer.appendTo(container);
-        $(image).appendTo(newImageContainer.children('.'+serviceVars.imageThumbContainer)[0]);
-        $(image).show();
-        newImageContainer.removeClass(serviceVars.imagePatternClass);
+        newImageContainer.removeClass(serviceVars.imagePatternClass).hide().show('slow');
+
+        return newImageContainer;
+    }
+
+    function addImageToThumbContainer(container, image) {
+        $(image).appendTo($(container).children('.'+serviceVars.imageThumbContainer)[0]);
+        $(image).fadeIn('slow');
+    }
+
+
+    function addLoadingOverlay(container) {
+        var overlay = createElement(container, '<div></div>', 'overlay');
+        createElement(overlay, '<i></i>', 'fa fa-refresh fa-spin');
+    }
+
+    function removeLoadingOverlay(container) {
+        $(container).children('.overlay').remove();
+    }
+
+    function srcToImg(src) {
+        return $('<img>').attr('src', src).hide();
+    }
+
+    function createThumbnail(container, image) {
+        if (typeof image !== 'object') {
+            srcToImg(src);
+        }
+        var newImageContainer = createThumbContainer(container);
+        addImageToThumbContainer(newImageContainer, image);
     }
 
     function renderUI(container, settings) {
