@@ -8,12 +8,14 @@
         'footerHintClass': 'iuf-footer-hint',
         'imagePatternClass': 'iuf-image-pattern',
         'imageThumbContainer': 'iuf-image-thumb-container',
+        'thumbContainer': 'iuf-thumb-container',
         'pluginContainer': 'iuf-plugin-container',
     };
 
     function uploadImage() {
         var formData = new FormData();
         formData.append('file', $(this)[0].files[0]);
+        formData.append('action', 'upload');
 
         var url = $(this).data('url');
 
@@ -31,6 +33,33 @@
                 removeLoadingOverlay(placeholderContainer);
                 addImageToThumbContainer(placeholderContainer, srcToImg(data.src));
             }.bind(this)
+        });
+    }
+
+    function deleteImage() {
+        var id = $($(this).parents('.'+serviceVars.thumbContainer)[0]).find('img').data('id');
+        var url = $(this).data('url');
+
+        var container = $(this).parent();
+        addLoadingOverlay(container);
+
+        $.ajax({
+            url : url,
+            type : 'POST',
+            data : {
+                'action': 'delete',
+                'id': id,
+            },
+            success : function(data) {
+                removeLoadingOverlay(container);
+                removeImage($(container).parents('.'+serviceVars.thumbContainer));
+            }.bind(this)
+        });
+    }
+
+    function removeImage(container) {
+        $(container).hide('fade', function() {
+            $(container).remove();
         });
     }
 
@@ -62,7 +91,7 @@
     }
 
     function createThumbContainer(container) {
-        var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone();
+        var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone(true);
         newImageContainer.appendTo(container);
         newImageContainer.removeClass(serviceVars.imagePatternClass).hide().fadeIn('slow');
 
@@ -120,7 +149,9 @@
 
                 var footerContainer = createElement(imagePatternContainer, '<div></div>', styles.content.thumb.footerContainer);
                 var footerButtonsContainer = createElement(footerContainer, '<div></div>', styles.content.thumb.footerButtonsContainer);
-                createElement(footerButtonsContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
+                var deleteButton = createElement(footerButtonsContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
+                deleteButton.on('click', deleteImage);
+                deleteButton.data('url', settings.deleteUrl);
             // !Image pattern
 
             if (preloadImages.length == 0) {
