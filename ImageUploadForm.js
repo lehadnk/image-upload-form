@@ -41,6 +41,7 @@
             success : function(data) {
                 removeLoadingOverlay(placeholderContainer);
                 addImageToThumbContainer(placeholderContainer, srcToImg(data.src));
+                updateTotalText(placeholderContainer);
             }.bind(this)
         });
     }
@@ -76,7 +77,9 @@
      */
     function removeImage(container) {
         $(container).hide('fade', function() {
+            var parent = container.parent();
             $(container).remove();
+            updateTotalText(parent);
         });
     }
 
@@ -129,14 +132,16 @@
     }
 
     /**
-     * Returns a text for a "total" block.
+     * Updates the text in a "total" block.
      * @param container
      * @param settings
      * @returns {string}
      */
-    function getTotalText(container, settings) {
-        var images = $(container).children('img');
-        return images.length+' images total, <b>3.14 Mb</b>';
+    function updateTotalText(element) {
+        var footerHint = $($(element).parents('.'+serviceVars.pluginContainer)[0]).find('.'+serviceVars.footerHintClass)[0];
+        var imagesCnt = $(getImageContainer(element)).children().length - 1;
+
+        $(footerHint).html(imagesCnt + ' images total');
     }
 
     /**
@@ -241,7 +246,8 @@
 
         // <Footer>
             var footer = createElement(container, '<div></div>', styles.footer.container);
-            $('<p>'+getTotalText(container, settings)+'</p>').prependTo(footer).addClass(styles.footer.infoBlock).addClass(serviceVars.footerHintClass);
+            createElement(footer, '<p></p>', styles.footer.infoBlock).addClass(serviceVars.footerHintClass);
+            updateTotalText(footer);
         // </Footer>
     }
 
@@ -285,7 +291,6 @@
             'text': {
                 'formHeader': 'Image Upload',
                 'deleteButton': 'Delete',
-                'total': '{0} images total, <b>{1}</b>'
             },
             'uploadUrl': '',
             'deleteUrl': '',
