@@ -3,6 +3,12 @@
  */
 (function($) {
 
+    /**
+     * Container classes for internal usage. Since we're allowing user to change
+     * class names for all the entities, we require to have some constants to access
+     * it.
+     * @type {{imageContainerClass: string, footerHintClass: string, imagePatternClass: string, imageThumbContainer: string, thumbContainer: string, pluginContainer: string}}
+     */
     var serviceVars = {
         'imageContainerClass': 'iuf-image-container',
         'footerHintClass': 'iuf-footer-hint',
@@ -12,6 +18,9 @@
         'pluginContainer': 'iuf-plugin-container',
     };
 
+    /**
+     * Uploads the contents of <input> to a server
+     */
     function uploadImage() {
         var formData = new FormData();
         formData.append('file', $(this)[0].files[0]);
@@ -36,6 +45,10 @@
         });
     }
 
+    /**
+     * Sends a request for removing the image from a server.
+     * Server should respond if deletion is allowed or not.
+     */
     function deleteImage() {
         var id = $($(this).parents('.'+serviceVars.thumbContainer)[0]).find('img').data('id');
         var url = $(this).data('url');
@@ -57,20 +70,43 @@
         });
     }
 
+    /**
+     * Removes the image thumbnail from the interface
+     * @param container
+     */
     function removeImage(container) {
         $(container).hide('fade', function() {
             $(container).remove();
         });
     }
 
+    /**
+     * Searches through DOM to find an "Image Container" collection.
+     * @param element Starting element
+     * @returns {*}
+     */
     function getImageContainer(element) {
         return $($(element).parents('.'+serviceVars.pluginContainer)[0]).find('.'+serviceVars.imageContainerClass)[0];
     }
 
+    /**
+     * Adds an element to the container. Generally, just a shorthand for the
+     * standard jQuery function.
+     * @param container
+     * @param element
+     * @param htmlClass
+     * @returns {*}
+     */
     function createElement(container, element, htmlClass) {
         return $(element).appendTo(container).addClass(htmlClass);
     }
 
+    /**
+     * Prepares images which was in the container already for further
+     * use, then returns them.
+     * @param container
+     * @returns {*}
+     */
     function getPreloadImages(container) {
         var images = $(container).children('img');
         images.each(function(key, image){
@@ -79,17 +115,35 @@
         return images;
     }
 
-    function renderPreloadImages(container, images, settings, styles) {
+    /**
+     * Transforms a set of preload <img>'s into a thumbnails.
+     * @param container
+     * @param images
+     * @param settings
+     * @param styles
+     */
+    function renderPreloadImages(container, images) {
         images.each(function(key, image){
             createThumbnail(container, image);
         });
     }
 
+    /**
+     * Returns a text for a "total" block.
+     * @param container
+     * @param settings
+     * @returns {string}
+     */
     function getTotalText(container, settings) {
         var images = $(container).children('img');
         return images.length+' images total, <b>3.14 Mb</b>';
     }
 
+    /**
+     * Creates a container for a thumbnail
+     * @param container
+     * @returns {*}
+     */
     function createThumbContainer(container) {
         var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone(true);
         newImageContainer.appendTo(container);
@@ -98,33 +152,57 @@
         return newImageContainer;
     }
 
+    /**
+     * Adds image to a thumbnail
+     * @param container
+     * @param image
+     */
     function addImageToThumbContainer(container, image) {
         $(image).appendTo($(container).children('.'+serviceVars.imageThumbContainer)[0]);
         $(image).fadeIn('slow');
     }
 
-
+    /**
+     * Adds a loading overlay on top of an element.
+     * @param container
+     */
     function addLoadingOverlay(container) {
         var overlay = createElement(container, '<div></div>', 'overlay');
         createElement(overlay, '<i></i>', 'fa fa-refresh fa-spin');
     }
 
+    /**
+     * Removes a loading overlay from the top of an element.
+     * @param container
+     */
     function removeLoadingOverlay(container) {
         $(container).children('.overlay').remove();
     }
 
+    /**
+     * Gets the uri of an image, and transforms it into an <img>
+     * @param src
+     * @returns {*}
+     */
     function srcToImg(src) {
         return $('<img>').attr('src', src).hide();
     }
 
+    /**
+     * Creates a thumbnail card with an image
+     * @param container
+     * @param image
+     */
     function createThumbnail(container, image) {
-        if (typeof image !== 'object') {
-            srcToImg(src);
-        }
         var newImageContainer = createThumbContainer(container);
         addImageToThumbContainer(newImageContainer, image);
     }
 
+    /**
+     * Renders the plugin UI
+     * @param container
+     * @param settings
+     */
     function renderUI(container, settings) {
         var preloadImages = getPreloadImages(container);
 
@@ -167,6 +245,11 @@
         // </Footer>
     }
 
+    /**
+     * Renders the plugin
+     * @param container
+     * @param settings
+     */
     function render(container, settings) {
         $(container).addClass(serviceVars.pluginContainer);
         renderUI(container, settings);
