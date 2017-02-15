@@ -81,6 +81,25 @@
     /**
      * Sends a request for removing the image from a server.
      * Server should respond if deletion is allowed or not.
+     *
+     * Response should be json-formatted object with two
+     * fields 'status' and 'error'. First is boolean variable
+     * displaying if file should be removed from the GUI, and
+     * second is error message should be displayed, if any of
+     * it required. These variables could be combined different
+     * ways (e.g. we didn't found an image referencing to this
+     * on server, so we want to remove it from the GUI too to
+     * not confuse the user:
+     * {
+     *      'status': true,
+     *      'error': 'No such image exists',
+     * }
+     *
+     * Standard positive answer should be like this:
+     * {
+     *      'status': true,
+     *      'error': false
+     * }
      */
     function deleteImage() {
         var id = $($(this).parents('.'+serviceVars.thumbContainer)[0]).find('img').data('id');
@@ -96,10 +115,21 @@
                 'action': 'delete',
                 'id': id,
             },
+            dataType: 'json',
             success : function(data) {
                 removeLoadingOverlay(container);
-                removeImage($(container).parents('.'+serviceVars.thumbContainer));
-            }.bind(this)
+                if (data.error) {
+                    displayError(container, 'Error!', data.error);
+                }
+                if (data.status) {
+                    removeImage($(container).parents('.'+serviceVars.thumbContainer));
+                }
+            },
+            error: function() {
+                removeLoadingOverlay(container);
+                displayError(container, 'Error!', 'Internal server error.');
+            },
+            timeout: 15000
         });
     }
 
