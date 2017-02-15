@@ -41,7 +41,36 @@
     }
 
     /**
-     * Uploads the contents of <input> to a server
+     * Uploads the contents of <input> to a server.
+     *
+     * A response should be a JSON-formatted string with two fields:
+     * "src" and "id". First is the uri of the image (or thumbnail)
+     * and second one is an ID which will be sent to server if user
+     * will hit the delete button.
+     *
+     * In case of unsuccessful operation these fields should be not
+     * preserved and replaced with simple "error" field containing
+     * a message which will be shown to the user. If no error message
+     * provided, default system message will be shown.
+     *
+     * E.g.:
+     * Default positive pesponse:
+     * {
+     *      src: '/upload/123.jpg',
+     *      id: 6395
+     * }
+     *
+     * Negative response, default message:
+     * {
+     *
+     * }
+     *
+     * Negative response, a message "Something went wrong!" will be
+     * shown:
+     * {
+     *      error: "Something went wrong!"
+     * }
+     *
      */
     function uploadImage() {
         var formData = new FormData();
@@ -61,9 +90,12 @@
             contentType: false,
             dataType: 'json',
             success : function(data) {
-                console.log(data);
                 if (!data.src || !data.id) {
-                    displayError(placeholderContainer, 'Error!', "It looks like there's something wrong with server response. Please notice server administrator about it.");
+                    if (data.error) {
+                        displayError(placeholderContainer, 'Error!', data.error);
+                    } else {
+                        displayError(placeholderContainer, 'Error!', "It looks like there's something wrong with server response. Please notice server administrator about it.");
+                    }
                     removeImage(placeholderContainer);
                 }
                 removeLoadingOverlay(placeholderContainer);
@@ -82,7 +114,7 @@
      * Sends a request for removing the image from a server.
      * Server should respond if deletion is allowed or not.
      *
-     * Response should be json-formatted object with two
+     * Response should be json-formatted string with two
      * fields 'status' and 'error'. First is boolean variable
      * displaying if file should be removed from the GUI, and
      * second is error message should be displayed, if any of
