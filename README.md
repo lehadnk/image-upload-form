@@ -78,7 +78,7 @@ shown:
 }
 ```
 
-### Delete
+## Delete
 URL configuration parameter: deleteUrl
 
 Request example:
