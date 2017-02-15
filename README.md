@@ -34,7 +34,8 @@ image-upload-form uses only two requests: upload and delete. You should implemen
 URL configuration parameter: uploadUrl
 
 An upload request is a typical jqXHR request:
-```POST uploadUrl
+```
+POST uploadUrl
 Accept: "application/json"
 Cache-Control: "no-cache"
 Content-Disposition: form-data;
