@@ -30,7 +30,7 @@ Or just download the files manually from the build/ folder and place them whenev
 
 # API
 image-upload-form uses only two requests: upload and delete. You should implement them both for the correct work of the plugin.
-#### Upload
+### Upload
 URL configuration parameter: uploadUrl
 
 An upload request is a typical jqXHR request:
@@ -78,7 +78,7 @@ shown:
 }
 ```
 
-#### Delete
+### Delete
 URL configuration parameter: deleteUrl
 
 Request example:
