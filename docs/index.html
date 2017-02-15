@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AdminLTE ImageUploadForm Test</title>
+    <title>AdminLTE ImageUploadForm Demo</title>
 
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/css/AdminLTE.min.css">
@@ -18,12 +18,7 @@
 
     <script type="text/javascript">
         $(function(){
-            $('#form1').imageUploadForm();
             $('#form2').imageUploadForm({
-                'text': {
-                    'formHeader': 'Загрузка изображений',
-                    'deleteButton': 'Удалить'
-                },
                 'uploadUrl': '#',
                 'deleteUrl': '#',
             });
@@ -34,9 +29,9 @@
 
 <div class="wrapper">
     <aside class="main-sidebar">
-        <section class="sidebar" style="height: auto;">
+        <section class="sidebar">
             <ul class="sidebar-menu">
-                <li class="header">Main Navigation</li>
+                <li class="header">Demo Page</li>
             </ul>
         </section>
     </aside>
@@ -45,16 +40,43 @@
             <div class="row">
                 <div class="col-md-12">
 
-
-
-                    <div id="form1" class="box box-primary"></div>
+                    <div class="callout callout-info">
+                        <h4>Reminder!</h4>
+                        Please be aware that upload/delete functionality is not available on Github Pages!<br>
+                        Eventually I'll provide another playground.<br>
+                        Definitely maybe. Sometime.
+                    </div>
 
                     <div id="form2" class="box box-primary">
                         <img data-id="12" src="img/Kitten-Kiss.jpg">
                         <img data-id="56" src="img/90.jpeg">
                     </div>
 
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Source code</h3>
+                        </div>
+                        <div class="box-body">
+                            <pre>
+&#x3C;link type=&#x22;text/css&#x22; rel=&#x22;stylesheet&#x22; href=&#x22;assets/build/ImageUploadForm.min.css&#x22;&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;assets/build/ImageUploadForm.min.js&#x22;&#x3E;&#x3C;/script&#x3E;
 
+&#x3C;script type=&#x22;text/javascript&#x22;&#x3E;
+    $(function(){
+        $(&#x27;#form2&#x27;).imageUploadForm({
+            &#x27;uploadUrl&#x27;: &#x27;#&#x27;,
+            &#x27;deleteUrl&#x27;: &#x27;#&#x27;,
+        });
+    });
+&#x3C;/script&#x3E;
+
+&#x3C;div id=&#x22;form2&#x22; class=&#x22;box box-primary&#x22;&#x3E;
+    &#x3C;img data-id=&#x22;12&#x22; src=&#x22;img/Kitten-Kiss.jpg&#x22;&#x3E;
+    &#x3C;img data-id=&#x22;56&#x22; src=&#x22;img/90.jpeg&#x22;&#x3E;
+&#x3C;/div&#x3E;
+                            </pre>
+                        </div>
+                    </div>
 
                 </div>
             </div>
