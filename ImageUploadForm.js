@@ -19,6 +19,28 @@
     };
 
     /**
+     * Displays dismissible error flash.
+     * @param title
+     * @param text
+     */
+    function displayError(container, title, text) {
+        var boxBody = $(getImageContainer(container)).parent();
+
+        var errorContainer = $('<div></div>').prependTo(boxBody).addClass('alert alert-danger alert-dismissible').hide().show('fade');
+
+        var removeErrorMessage = function() {
+            $(errorContainer).hide('fade', function() {
+                $(errorContainer).remove();
+            });
+        };
+        setTimeout(removeErrorMessage, 3000);
+
+        createElement(errorContainer, '<button>×</button>', 'close').on('click', removeErrorMessage);
+        createElement(errorContainer, '<h4><i class="icon fa fa-ban"></i>'+title+'</h4>', '');
+        errorContainer.append(text);
+    }
+
+    /**
      * Uploads the contents of <input> to a server
      */
     function uploadImage() {
@@ -39,10 +61,20 @@
             contentType: false,
             dataType: 'json',
             success : function(data) {
+                console.log(data);
+                if (!data.src || !data.id) {
+                    displayError(placeholderContainer, 'Error!', "It looks like there's something wrong with server response. Please notice server administrator about it.");
+                    removeImage(placeholderContainer);
+                }
                 removeLoadingOverlay(placeholderContainer);
-                addImageToThumbContainer(placeholderContainer, srcToImg(data.src));
+                addImageToThumbContainer(placeholderContainer, dataToImg(data));
                 updateTotalText(placeholderContainer);
-            }.bind(this)
+            },
+            error: function() {
+                displayError(placeholderContainer, 'Error!', 'Internal server error.');
+                removeImage(placeholderContainer);
+            },
+            timeout: 15000
         });
     }
 
@@ -150,6 +182,7 @@
      * @returns {*}
      */
     function createThumbContainer(container) {
+        $(container).parent().show();
         var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone(true);
         newImageContainer.appendTo(container);
         newImageContainer.removeClass(serviceVars.imagePatternClass).hide().fadeIn('slow');
@@ -185,12 +218,12 @@
     }
 
     /**
-     * Gets the uri of an image, and transforms it into an <img>
+     * Transforms the server response to <img> object
      * @param src
      * @returns {*}
      */
-    function srcToImg(src) {
-        return $('<img>').attr('src', src).hide();
+    function dataToImg(data) {
+        return $('<img>').attr('src', data.src).attr('id', data.id).hide();
     }
 
     /**
