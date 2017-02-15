@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AdminLTE ImageUploadForm Test</title>
+
+    <link type="text/css" rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="../bower_components/AdminLTE/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="../bower_components/AdminLTE/dist/css/skins/skin-blue.min.css">
+
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="../bower_components/AdminLTE/dist/js/app.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="../build/ImageUploadForm.min.css">
+    <script type="text/javascript" src="../build/ImageUploadForm.min.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $('#form1').imageUploadForm();
+            $('#form2').imageUploadForm({
+                'text': {
+                    'formHeader': 'Загрузка изображений',
+                    'deleteButton': 'Удалить'
+                },
+                'uploadUrl': '#',
+                'deleteUrl': '#',
+            });
+        });
+    </script>
+</head>
+<body class="skin-blue sidebar-mini">
+
+<div class="wrapper">
+    <aside class="main-sidebar">
+        <section class="sidebar" style="height: auto;">
+            <ul class="sidebar-menu">
+                <li class="header">Main Navigation</li>
+            </ul>
+        </section>
+    </aside>
+    <section class="content-wrapper">
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+
+
+                    <div id="form1" class="box box-primary"></div>
+
+                    <div id="form2" class="box box-primary">
+                        <img data-id="12" src="../Design/img/Kitten-Kiss.jpg">
+                        <img data-id="56" src="../Design/img/90.jpeg">
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+</body>
+</html>
