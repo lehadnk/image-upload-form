@@ -288,7 +288,7 @@
      * @returns {*}
      */
     function dataToImg(data) {
-        return $('<img>').attr('src', data.src).attr('id', data.id).hide();
+        return $('<img>').attr('src', data.src).data('id', data.id).hide();
     }
 
     /**
