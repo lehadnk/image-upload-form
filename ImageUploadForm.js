@@ -43,31 +43,34 @@
     /**
      * Uploads the contents of <input> to a server.
      *
-     * A response should be a JSON-formatted string with two fields:
-     * "src" and "id". First is the uri of the image (or thumbnail)
-     * and second one is an ID which will be sent to server if user
-     * will hit the delete button.
+     * A positive response should be a JSON-formatted string with three
+     * fields: "status", "src" and "id".
+     * First is bool representing a status of the operation, next is the
+     * uri of the image (or thumbnail) and last one is an ID which will
+     * be sent to server if user will hit the delete button.
      *
-     * In case of unsuccessful operation these fields should be not
-     * preserved and replaced with simple "error" field containing
-     * a message which will be shown to the user. If no error message
-     * provided, default system message will be shown.
+     * In case of unsuccessful operation "src" and "id" fields may be not
+     * preserved and replaced with "error" field containing a message which
+     * will be shown to the user. If no error message provided, default system
+     * message will be shown.
      *
      * E.g.:
      * Default positive pesponse:
      * {
+     *      status: true,
      *      src: '/upload/123.jpg',
      *      id: 6395
      * }
      *
      * Negative response, default message:
      * {
-     *
+     *      status: false
      * }
      *
      * Negative response, a message "Something went wrong!" will be
      * shown:
      * {
+     *      status: false,
      *      error: "Something went wrong!"
      * }
      *
@@ -90,7 +93,7 @@
             contentType: false,
             dataType: 'json',
             success : function(data) {
-                if (!data.src || !data.id) {
+                if (!data.src || !data.id || !data.status) {
                     if (data.error) {
                         displayError(placeholderContainer, 'Error!', data.error);
                     } else {
