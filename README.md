@@ -1,4 +1,6 @@
 # image-upload-form
+[Demo page](https://lehadnk.github.io/image-upload-form/)
+
 Responsive jQuery-powered multiple image upload form for various css frameworks.
 
 # Prerequisites
