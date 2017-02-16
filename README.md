@@ -49,11 +49,11 @@ Content-Disposition: form-data; name="action"
 
 upload
 ```
-Two only parameters in this request is "file" representing the contents of the file, and "action" which is always "upload" so you could bind both requests to the same url if you want.
+Two only parameters in this request are "file" representing the contents of the file, and "action" which is always "upload" so you could bind both requests to the same url if you want.
 
-A positive response should be a JSON-formatted string with three fields: "status", "src" and "id". First is bool representing a status of the operation, next is the uri of the image (or thumbnail) and last one is an ID which will be sent to server if user will hit the delete button.
+A positive response should be a JSON-formatted string with three fields: "status", "src" and "id". First is bool representing a status of the operation, next is the uri of the image (or thumbnail) and the last one is an ID which will be sent to server if user will hit the delete button.
 
-In case of unsuccessful operation "src" and "id" fields may be not preserved and replaced with "error" field containing a message which will be shown to the user. If no error message provided, default system message will be shown.
+In case of unsuccessful operation "src" and "id" fields may be not preserved and replaced with "error" field containing a message which will be shown to the user. If no error message provided, the default system message will be shown.
 
 E.g.:
 Default positive pesponse:
@@ -72,8 +72,7 @@ Negative response, default message:
 }
 ```
 
-Negative response, error message will be "Something went wrong!":
-shown:
+Negative response, an error message "Something went wrong!" will be shown:
 ```json
 {
      status: false,
@@ -93,9 +92,9 @@ action=delete
 id=56
 ```
 
-Delete request provides you an action name ("action"), allowing you to use the same URL for both actions, and also id parameter, which is system identifier for the image.
+Delete request provides you an action name ("action"), allowing you to use the same URL for both actions, and also id parameter, which is the system identifier for the image.
 
-Response should be json-formatted string with two fields 'status' and 'error'. First is boolean variable displaying if file should be removed from the GUI, and second is error message should be displayed, if any of it required. These variables could be combined different ways (e.g. we didn't found an image referencing to this on server, so we want to remove it from the GUI too to not confuse the user:
+The response should be json-formatted string with two fields 'status' and 'error'. First is a boolean variable displaying if file should be removed from the GUI, and the second is error message should be displayed, if any of it required. These variables could be combined in different ways (e.g. we didn't find an image referencing to this on server, so we want to remove it from the GUI too to not confuse the user):
 ```json
 {
     'status': true,
