@@ -4,8 +4,8 @@
 Responsive jQuery-powered multiple image upload form for various css frameworks.
 
 # Prerequisites
-jQuery 1.7+
-AdminLTE
+* jQuery 1.7+
+* AdminLTE
 
 # Installation guide
 You could install the package via bower package manager:
