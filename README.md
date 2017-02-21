@@ -177,3 +177,8 @@ if ($_POST['action'] == 'delete') {
 
 # CSS Framework Integration
 TBD. Right now only [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html) is supported.
+
+# Framework Support
+image-upload-form is also available as extension:
+* [Yii2](https://github.com/lehadnk/yii2-image-upload-form)
+* Symfony (TBD)
