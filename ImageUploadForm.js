@@ -16,6 +16,7 @@
         'imageThumbContainer': 'iuf-image-thumb-container',
         'thumbContainer': 'iuf-thumb-container',
         'pluginContainer': 'iuf-plugin-container',
+        'thumb': 'iuf-thumb-image',
     };
 
     /**
@@ -288,7 +289,7 @@
      * @returns {*}
      */
     function dataToImg(data) {
-        return $('<img>').attr('src', data.src).data('id', data.id).hide();
+        return $('<img>').attr('src', data.src).data('id', data.id).addClass(serviceVars.thumb).hide();
     }
 
     /**
