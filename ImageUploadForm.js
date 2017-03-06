@@ -225,6 +225,7 @@
      */
     function renderPreloadImages(container, images) {
         images.each(function(key, image){
+            $(image).addClass(serviceVars.thumb);
             createThumbnail(container, image);
         });
     }
