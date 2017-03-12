@@ -76,7 +76,7 @@ Negative response, an error message "Something went wrong!" will be shown:
 ```json
 {
      "status": false,
-     "error"": "Something went wrong!"
+     "error": "Something went wrong!"
 }
 ```
 
