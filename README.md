@@ -59,24 +59,24 @@ E.g.:
 Default positive pesponse:
 ```json
 {
-    status: true,
-    src: '/upload/123.jpg',
-    id: 6395
+    "status": true,
+    "src": "/upload/123.jpg",
+    "id": 6395
 }
 ```
 
 Negative response, default message:
 ```json
 {
-     status: false
+     "status": false
 }
 ```
 
 Negative response, an error message "Something went wrong!" will be shown:
 ```json
 {
-     status: false,
-     error: "Something went wrong!"
+     "status": false,
+     "error"": "Something went wrong!"
 }
 ```
 
@@ -97,16 +97,16 @@ Delete request provides you an action name ("action"), allowing you to use the s
 The response should be json-formatted string with two fields 'status' and 'error'. First is a boolean variable displaying if file should be removed from the GUI, and the second is error message should be displayed, if any of it required. These variables could be combined in different ways (e.g. we didn't find an image referencing to this on server, so we want to remove it from the GUI too to not confuse the user):
 ```json
 {
-    'status': true,
-    'error': 'No such image exists',
+    "status": true,
+    "error": "No such image exists",
 }
 ```
 
 Standard positive response should be like this:
 ```json
 {
-     'status': true,
-     'error': false
+     "status": true,
+     "error": false
 }
 ```
 
