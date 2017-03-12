@@ -8,13 +8,13 @@ var uglify = require('gulp-uglify');
 var copy = require('gulp-copy');
 
 gulp.task('build', function() {
-    gulp.src(['ImageUploadForm.css'])
+    gulp.src(['src/ImageUploadForm.css'])
         .pipe(minify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('build/'))
         .pipe(copy('docs/assets/'));
 
-    gulp.src(['ImageUploadForm.js'])
+    gulp.src(['src/ImageUploadForm.js'])
         .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('build/'))

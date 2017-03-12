@@ -361,6 +361,11 @@
         renderUI(container, settings);
     }
 
+    /**
+     * jQuery function registration
+     * @param action
+     * @param options
+     */
     $.fn.imageUploadForm = function(options){
         var settings = $.extend({
             'maxFiles': 7,
