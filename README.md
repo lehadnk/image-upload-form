@@ -5,7 +5,10 @@ Responsive jQuery-powered multiple image upload form for various css frameworks.
 
 # Prerequisites
 * jQuery 1.7+
-* AdminLTE
+
+# CSS Framework Integration
+TBD. Right now only [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html) is supported.
+You could refer to [Renderers](#renderers) section of this guide for detailed information.
 
 # Installation guide
 You could install the package via bower package manager:
@@ -17,6 +20,7 @@ Or just download the files manually from the build/ folder and place them whenev
 # Usage example
 ```html
 <script type="text/javascript" src="build/ImageUploadForm.js"></script>
+<script type="text/javascript" src="build/ImageUploadFormAdminLTE.min.js"></script>
 <link type="text/css" href="build/ImageUploadForm.css"></script>
 
 <script>
@@ -132,6 +136,28 @@ You're able to pre-fill the form with some images which was already uploaded to 
 </script>
 ```
 
+# Renderers
+ImageUploadForm has a "renderers" feature which is allowing you to pick a design matching the CSS framework you use by simply including a renderer file suiting your needs:
+```html
+<!-- AdminLTE -->
+<script type="text/javascript" src="build/ImageUploadForm.min.js"></script>
+<script type="text/javascript" src="build/ImageUploadFormAdminLTE.min.js"></script>
+
+<!-- Bootstrap -->
+<script type="text/javascript" src="build/ImageUploadForm.min.js"></script>
+<script type="text/javascript" src="build/ImageUploadFormBootstrap.min.js"></script>
+
+<!-- Any other custom renderer created by you -->
+<script type="text/javascript" src="build/ImageUploadForm.min.js"></script>
+<script type="text/javascript" src="/js/ImageUploadFormMyRenderer.js"></script>
+```
+**!RENDERER FILE SHOULD BE PLACED ONLY AFTER THE MAIN PLUGIN FILE!**
+
+## Custom renderers
+You could clone `src\renderers\_RendererTemplate.js` to create a custom renderer to change the way plugin looks, or to provide a support of a CMS or Framework you use.
+
+All the details, renderer skeleton and code snippets are available in `_RendererTemplate.js`.
+
 # Server script example
 Here's an example of a simple PHP server script which could be used to handle image-upload-form requests:
 ```php
@@ -174,9 +200,6 @@ if ($_POST['action'] == 'delete') {
 }
 ```
 **!ATTENTION! NEVER USE THIS SCRIPT IN PRODUCTION ENVIRONMENT. IT IS EXTREMELY UNSAFE AND FOR TESTING PURPOSES ONLY!**
-
-# CSS Framework Integration
-TBD. Right now only [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html) is supported.
 
 # Framework Support
 image-upload-form is also available as extension:

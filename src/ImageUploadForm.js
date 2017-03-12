@@ -4,12 +4,32 @@
 (function($) {
 
     /**
+     * jQuery function registration
+     * @param action
+     * @param options
+     */
+    $.fn.imageUploadForm = function(options){
+        var settings = $.extend({
+            'maxFiles': 7,
+            'style': $.fn.imageUploadForm.getStyles(),
+            'text': {
+                'formHeader': 'Image Upload',
+                'deleteButton': 'Delete',
+            },
+            'uploadUrl': '',
+            'deleteUrl': '',
+        }, options);
+
+        render(this, settings);
+    }
+
+    /**
      * Container classes for internal usage. Since we're allowing user to change
      * class names for all the entities, we require to have some constants to access
      * it.
-     * @type {{imageContainerClass: string, footerHintClass: string, imagePatternClass: string, imageThumbContainer: string, thumbContainer: string, pluginContainer: string}}
+     * @type {{imageContainerClass: string, footerHintClass: string, imagePatternClass: string, imageThumbContainer: string, thumbContainer: string, pluginContainer: string, thumb: string, overlay: string}}
      */
-    var serviceVars = {
+    $.fn.imageUploadForm.serviceVars = {
         'imageContainerClass': 'iuf-image-container',
         'footerHintClass': 'iuf-footer-hint',
         'imagePatternClass': 'iuf-image-pattern',
@@ -17,7 +37,19 @@
         'thumbContainer': 'iuf-thumb-container',
         'pluginContainer': 'iuf-plugin-container',
         'thumb': 'iuf-thumb-image',
-    };
+        'overlay': 'iuf-overlay'
+    }
+    var serviceVars = $.fn.imageUploadForm.serviceVars;
+
+    /**
+     * Creates a thumbnail card with an image
+     * @param container
+     * @param image
+     */
+    $.fn.imageUploadForm.createThumbnail = function(container, image) {
+        var newImageContainer = createThumbContainer(container);
+        addImageToThumbContainer(newImageContainer, image);
+    }
 
     /**
      * Displays dismissible error flash.
@@ -26,19 +58,7 @@
      */
     function displayError(container, title, text) {
         var boxBody = $(getImageContainer(container)).parent();
-
-        var errorContainer = $('<div></div>').prependTo(boxBody).addClass('alert alert-danger alert-dismissible').hide().show('fade');
-
-        var removeErrorMessage = function() {
-            $(errorContainer).hide('fade', function() {
-                $(errorContainer).remove();
-            });
-        };
-        setTimeout(removeErrorMessage, 3000);
-
-        createElement(errorContainer, '<button>×</button>', 'close').on('click', removeErrorMessage);
-        createElement(errorContainer, '<h4><i class="icon fa fa-ban"></i>'+title+'</h4>', '');
-        errorContainer.append(text);
+        $.fn.imageUploadForm.renderError(boxBody, title, text);
     }
 
     /**
@@ -58,21 +78,21 @@
      * E.g.:
      * Default positive pesponse:
      * {
-     *      status: true,
-     *      src: '/upload/123.jpg',
-     *      id: 6395
+     *      "status": true,
+     *      "src": "/upload/123.jpg",
+     *      "id": 6395
      * }
      *
      * Negative response, default message:
      * {
-     *      status: false
+     *      "status": false
      * }
      *
      * Negative response, a message "Something went wrong!" will be
      * shown:
      * {
-     *      status: false,
-     *      error: "Something went wrong!"
+     *      "status": false,
+     *      "error": "Something went wrong!"
      * }
      *
      */
@@ -127,14 +147,14 @@
      * on server, so we want to remove it from the GUI too to
      * not confuse the user:
      * {
-     *      'status': true,
-     *      'error': 'No such image exists',
+     *      "status": true,
+     *      "error": "No such image exists",
      * }
      *
      * Standard positive answer should be like this:
      * {
-     *      'status': true,
-     *      'error': false
+     *      "status": true,
+     *      "error": false
      * }
      */
     function deleteImage() {
@@ -191,18 +211,6 @@
     }
 
     /**
-     * Adds an element to the container. Generally, just a shorthand for the
-     * standard jQuery function.
-     * @param container
-     * @param element
-     * @param htmlClass
-     * @returns {*}
-     */
-    function createElement(container, element, htmlClass) {
-        return $(element).appendTo(container).addClass(htmlClass);
-    }
-
-    /**
      * Prepares images which was in the container already for further
      * use, then returns them.
      * @param container
@@ -210,24 +218,10 @@
      */
     function getPreloadImages(container) {
         var images = $(container).children('img');
-        images.each(function(key, image){
+        images.each(function (key, image) {
             $(image).hide();
         });
         return images;
-    }
-
-    /**
-     * Transforms a set of preload <img>'s into a thumbnails.
-     * @param container
-     * @param images
-     * @param settings
-     * @param styles
-     */
-    function renderPreloadImages(container, images) {
-        images.each(function(key, image){
-            $(image).addClass(serviceVars.thumb);
-            createThumbnail(container, image);
-        });
     }
 
     /**
@@ -272,8 +266,7 @@
      * @param container
      */
     function addLoadingOverlay(container) {
-        var overlay = createElement(container, '<div></div>', 'overlay');
-        createElement(overlay, '<i></i>', 'fa fa-refresh fa-spin');
+        $.fn.imageUploadForm.addLoadingOverlay(container);
     }
 
     /**
@@ -281,7 +274,7 @@
      * @param container
      */
     function removeLoadingOverlay(container) {
-        $(container).children('.overlay').remove();
+        $(container).children('.'+$.fn.imageUploadForm.serviceVars.overlay).remove();
     }
 
     /**
@@ -294,13 +287,18 @@
     }
 
     /**
-     * Creates a thumbnail card with an image
+     * Transforms a set of preload <img>'s into a set of thumbnails.
      * @param container
-     * @param image
+     * @param images
      */
-    function createThumbnail(container, image) {
-        var newImageContainer = createThumbContainer(container);
-        addImageToThumbContainer(newImageContainer, image);
+    function renderPreloadImages(container, images) {
+        var serviceVars = $.fn.imageUploadForm.serviceVars;
+        var createThumbnail = $.fn.imageUploadForm.createThumbnail;
+
+        images.each(function(key, image){
+            $(image).addClass(serviceVars.thumb);
+            createThumbnail(container, image);
+        });
     }
 
     /**
@@ -314,39 +312,22 @@
         var styles = settings.style;
 
         // <Header>
-            var header = createElement(container, '<div></div>', styles.header.container);
-            createElement(header, '<h3>'+settings.text.formHeader+'</h3>', styles.header.header);
-            var headerButtonsContainer = createElement(header, '<div></div>', styles.header.buttonsContainer);
-            var uploadButton = createElement(headerButtonsContainer, '<input type="file"></input>', styles.header.addImageButton);
-            $(uploadButton).on('change', uploadImage);
-            $(uploadButton).data('url', settings.uploadUrl);
+            $.fn.imageUploadForm.renderHeader(container, settings, uploadImage);
         // </Header>
 
         // <Body>
-            var body = createElement(container, '<div></div>', styles.content.container);
-            var row = createElement(body, '<div></div>', styles.content.row).addClass(serviceVars.imageContainerClass);
-
-            // Image pattern
-                var imagePatternContainer = createElement(row, '<div></div>', styles.content.thumb.container).addClass(serviceVars.imagePatternClass);
-                createElement(imagePatternContainer, '<div></div>', styles.content.thumb.thumbContainer).addClass(serviceVars.imageThumbContainer);
-
-                var footerContainer = createElement(imagePatternContainer, '<div></div>', styles.content.thumb.footerContainer);
-                var footerButtonsContainer = createElement(footerContainer, '<div></div>', styles.content.thumb.footerButtonsContainer);
-                var deleteButton = createElement(footerButtonsContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
-                deleteButton.on('click', deleteImage);
-                deleteButton.data('url', settings.deleteUrl);
-            // !Image pattern
+            var body = $.fn.imageUploadForm.renderBody(container, settings, deleteImage, preloadImages);
 
             if (preloadImages.length == 0) {
                 $(body).hide();
             } else {
-                renderPreloadImages(row, preloadImages, settings, styles);
+                var imageContainer = getImageContainer(body);
+                renderPreloadImages(imageContainer, preloadImages, settings, styles);
             }
         // </Body>
 
         // <Footer>
-            var footer = createElement(container, '<div></div>', styles.footer.container);
-            createElement(footer, '<p></p>', styles.footer.infoBlock).addClass(serviceVars.footerHintClass);
+            var footer = $.fn.imageUploadForm.renderFooter(container, settings);
             updateTotalText(footer);
         // </Footer>
     }
@@ -361,46 +342,102 @@
         renderUI(container, settings);
     }
 
-    /**
-     * jQuery function registration
-     * @param action
-     * @param options
-     */
-    $.fn.imageUploadForm = function(options){
-        var settings = $.extend({
-            'maxFiles': 7,
-            'style': {
-                'header': {
-                    'container': 'box-header with-border',
-                    'header': 'box-title',
-                    'buttonsContainer': 'box-tools pull-right',
-                    'addImageButton': 'btn btn-primary btn-sm',
-                },
-                'content': {
-                    'container': 'box-body',
-                    'row': 'row',
-                    'thumb': {
-                        'container': 'col-lg-3 col-md-6 col-xs-12 iuf-thumb-container',
-                        'thumbContainer': 'thumbnail no-margin iuf-preview-container',
-                        'thumb': 'iuf-thumb-image',
-                        'footerContainer': 'box box-solid no-margin iuf-thumb-footer',
-                        'footerButtonsContainer': 'box-footer',
-                        'deleteButton': 'btn btn-danger',
-                    }
-                },
-                'footer': {
-                    'container': 'box-footer',
-                    'infoBlock': 'help-block'
-                }
-            },
-            'text': {
-                'formHeader': 'Image Upload',
-                'deleteButton': 'Delete',
-            },
-            'uploadUrl': '',
-            'deleteUrl': '',
-        }, options);
-
-        render(this, settings);
+    function noRendererError() {
+        console.error('ImageUploadForm: no renderer set. Please set up the plugin referring to official documentation: https://github.com/lehadnk/image-upload-form#renderers');
     }
+
+    /**
+     * This function should the return the JSON structure containing a list of possible
+     * styles used by different elements, so user can overload it if needed:
+     *
+     * E.g.:
+     * return {
+     *   'header': {
+     *       'container': 'box-header with-border',
+     *       'header': 'box-title',
+     *       'buttonsContainer': 'box-tools pull-right',
+     *       'addImageButton': 'btn btn-primary btn-sm',
+     *   },
+     *
+     *  $('#container').imageUploadForm({
+     *      'styles': {
+     *          'header': {
+     *              'container': 'my-header-container-class'
+     *          }
+     *      }
+     *  });
+     */
+    $.fn.imageUploadForm.getStyles = noRendererError;
+
+    /**
+     * This function should draw a plugin header.
+     *
+     * Useful constructions:
+     * settings.style - JSON array of element styles, available for user to overload them (@see $.fn.imageUploadForm.getStyles)
+     * uploadImage - a reference to image upload function. E.g.:
+     * $('<input type="file"></input>').appendTo(container).on('change', uploadImage);
+     * settings.uploadUrl - an upload URL. Should be a data- property of input element E.g.:
+     * $(uploadButton).data('url', settings.uploadUrl);
+     *
+     * @param container
+     * @param settings
+     * @param uploadImage
+     */
+    $.fn.imageUploadForm.renderHeader = noRendererError;
+
+    /**
+     * This function should draw a plugin body.
+     *
+     * The body container should be returned by this function.
+     *
+     * Also, a hidden pattern of image thumbnail card should be created as a part of this call. It should be placed
+     * in the same container which is used for holding image thumbnails, and have a class declared in
+     * $.fn.imageUploadForm.serviceVars.imagePatternClass
+     *
+     * Following element classes must be present in this block:
+     * $.fn.imageUploadForm.serviceVars.imageContainerClass: a container for thumbnail cards
+     * $.fn.imageUploadForm.serviceVars.imagePatternClass: hidden thumbnail pattern container.
+     * $.fn.imageUploadForm.serviceVars.imageThumbContainer: a container for <img> inside a thumb card
+     *
+     * @param container
+     * @param settings
+     * @param deleteImage
+     * @param preloadImages
+     */
+    $.fn.imageUploadForm.renderBody = noRendererError;
+
+    /**
+     * This function should render a plugin footer.
+     *
+     * The main footer container should be returned by this function.
+     *
+     * Following serviceVars should be used as an element classes of this block:
+     * $.fn.imageUploadForm.serviceVars.imagePatternClass: hint block in the footer of the element. Contains an information
+     * such as total number of images, e.t.c.
+     *
+     * @param container
+     * @param settings
+     * @returns {*}
+     */
+    $.fn.imageUploadForm.renderFooter = noRendererError;
+
+    /**
+     * This function should render an error message to inform user that something went wrong.
+     *
+     * @param container A container containing image thumbnail cards. Most likely this is a place where you would like
+     * to place the message, but you could traverse the DOM tree from here using classes stored in serviceVars if you want.
+     * @param title
+     * @param text
+     */
+    $.fn.imageUploadForm.renderError = noRendererError;
+
+    /**
+     * This function should display a loading overlay on top of the provided container.
+     *
+     * Following serviceVars should be used as an element classes of this block:
+     * $.fn.imageUploadForm.serviceVars.overlay: an overlay container element. Will be destroyed when loading is over.
+     *
+     * @param container
+     */
+    $.fn.imageUploadForm.addLoadingOverlay = noRendererError;
 }(jQuery));

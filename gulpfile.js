@@ -19,4 +19,10 @@ gulp.task('build', function() {
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('build/'))
         .pipe(copy('docs/assets/'));
+
+    gulp.src(['src/renderers/*.js', '!src/renderers/_RendererTemplate.js'])
+        .pipe(uglify())
+        .pipe(rename({ prefix: 'ImageUploadForm', 'suffix': '.min' }))
+        .pipe(gulp.dest('build/'))
+        .pipe(copy('docs/assets/'));
 });
