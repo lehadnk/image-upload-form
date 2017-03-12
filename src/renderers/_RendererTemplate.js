@@ -40,7 +40,7 @@ function createElement(container, element, htmlClass) {
      */
 $.fn.imageUploadForm.getStyles = function() {
     return {
-
+        'container': ''
     };
 }
 

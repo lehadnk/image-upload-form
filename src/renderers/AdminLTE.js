@@ -12,6 +12,7 @@ function createElement(container, element, htmlClass) {
 
 $.fn.imageUploadForm.getStyles = function() {
     return {
+        'container': 'box box-primary',
         'header': {
             'container': 'box-header with-border',
             'header': 'box-title',

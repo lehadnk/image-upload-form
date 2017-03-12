@@ -34,10 +34,14 @@
         'footerHintClass': 'iuf-footer-hint',
         'imagePatternClass': 'iuf-image-pattern',
         'imageThumbContainer': 'iuf-image-thumb-container',
-        'thumbContainer': 'iuf-thumb-container',
         'pluginContainer': 'iuf-plugin-container',
-        'thumb': 'iuf-thumb-image',
-        'overlay': 'iuf-overlay'
+        'overlay': 'iuf-overlay',
+
+        /**
+         * @todo These two not just a names, but also contains some css rules. Not a good approach.
+         */
+        'thumbContainer': 'iuf-thumb-container',
+        'thumb': 'iuf-thumb-image'
     }
     var serviceVars = $.fn.imageUploadForm.serviceVars;
 
@@ -338,7 +342,7 @@
      * @param settings
      */
     function render(container, settings) {
-        $(container).addClass(serviceVars.pluginContainer);
+        $(container).addClass(serviceVars.pluginContainer).addClass(settings.style.container);
         renderUI(container, settings);
     }
 
@@ -348,10 +352,14 @@
 
     /**
      * This function should the return the JSON structure containing a list of possible
-     * styles used by different elements, so user can overload it if needed:
+     * styles used by different elements, so user can overload it if needed.
+     *
+     * This structure should contain 'container' element which will be applied to a
+     * plugin container. This field is mandatory.
      *
      * E.g.:
      * return {
+     *   'container': 'box box-primary',
      *   'header': {
      *       'container': 'box-header with-border',
      *       'header': 'box-title',
