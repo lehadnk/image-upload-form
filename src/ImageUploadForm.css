@@ -21,3 +21,35 @@
 .iuf-image-pattern {
     display: none;
 }
+
+.iuf-bootstrap-card {
+    margin-bottom: 0;
+}
+
+.iuf-bootstrap-header {
+    margin-top: 5px;
+}
+
+@keyframes iuf-spinner {
+    to {transform: rotate(360deg);}
+}
+
+.iuf-spinner:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #333;
+    animation: iuf-spinner .6s linear infinite;
+}
+
+.iuf-has-overlay {
+    opacity: .4;
+}

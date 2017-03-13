@@ -7,7 +7,10 @@ Responsive jQuery-powered multiple image upload form for various css frameworks.
 * jQuery 1.7+
 
 # CSS Framework Integration
-TBD. Right now only [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html) is supported.
+* [AdminLTE](https://almsaeedstudio.com/themes/AdminLTE/index2.html)
+* [Bootstrap 3](http://getbootstrap.com)
+* (TBD) [Semantic UI](http://semantic-ui.com)
+
 You could refer to [Renderers](#renderers) section of this guide for detailed information.
 
 # Installation guide

@@ -23,7 +23,7 @@ $.fn.imageUploadForm.getStyles = function() {
             'container': 'box-body',
             'row': 'row',
             'thumb': {
-                'container': 'col-lg-3 col-md-6 col-xs-12 iuf-thumb-container',
+                'container': 'col-lg-3 col-md-6 col-xs-12',
                 'thumbContainer': 'thumbnail no-margin iuf-preview-container',
                 'thumb': 'iuf-thumb-image',
                 'footerContainer': 'box box-solid no-margin iuf-thumb-footer',
@@ -49,7 +49,7 @@ $.fn.imageUploadForm.renderHeader = function(container, settings, uploadImage) {
     $(uploadButton).data('url', settings.uploadUrl);
 }
 
-$.fn.imageUploadForm.renderBody = function(container, settings, deleteImage, preloadImages) {
+$.fn.imageUploadForm.renderBody = function(container, settings, deleteImage) {
     var styles = settings.style;
     var serviceVars = $.fn.imageUploadForm.serviceVars;
 
@@ -80,7 +80,7 @@ $.fn.imageUploadForm.renderFooter = function(container, settings) {
 }
 
 $.fn.imageUploadForm.renderError = function(container, title, text) {
-    var errorContainer = $('<div></div>').prependTo(container).addClass('alert alert-danger alert-dismissible').hide().show('fade');
+    var errorContainer = $('<div></div>').prependTo(container.parent()).addClass('alert alert-danger alert-dismissible').hide().show('fade');
 
     var removeErrorMessage = function() {
         $(errorContainer).hide('fade', function() {

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap ImageUploadForm Test</title>
+
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="assets/build/ImageUploadForm.min.css">
+    <script type="text/javascript" src="assets/build/ImageUploadForm.min.js"></script>
+    <script type="text/javascript" src="assets/build/ImageUploadFormBootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $('#form1').imageUploadForm();
+            $('#form2').imageUploadForm({
+                'uploadUrl': 'http://test-server.local/',
+                'deleteUrl': 'http://test-server.local/',
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="navbar-inverse navbar-fixed-top navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Image Upload Form</a>
+                </div>
+                <div id="w0-collapse" class="collapse navbar-collapse">
+                    <ul id="w1" class="navbar-nav navbar-right nav">
+                        <li><a href="index.html">AdminLTE</a></li>
+                        <li class="active"><a href="bootstrap.html">Bootstrap</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container" style="margin-top: 70px; margin-bottom: 10px;">
+
+
+            <div class="alert alert-info" role="alert">
+                <h4>Reminder!</h4>
+                Please be aware that upload/delete functionality is not available on Github Pages!<br>
+                Eventually I'll provide another playground.<br>
+                Definitely maybe. Sometime.
+            </div>
+
+
+
+            <div id="form2">
+                <img data-id="12" src="img/Kitten-Kiss.jpg">
+                <img data-id="56" src="img/90.jpeg">
+                <img data-id="72" src="img/CwqrTMsWgAA11-B.jpg">
+            </div>
+
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Source Code</h3>
+                </div>
+                <div class="panel-body">
+                <pre>
+&#x3C;link type=&#x22;text/css&#x22; rel=&#x22;stylesheet&#x22; href=&#x22;assets/build/ImageUploadForm.min.css&#x22;&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;assets/build/ImageUploadForm.min.js&#x22;&#x3E;&#x3C;/script&#x3E;
+&#x3C;script type=&#x22;text/javascript&#x22; src=&#x22;assets/build/ImageUploadFormBootstrap.min.js&#x22;&#x3E;&#x3C;/script&#x3E;
+
+&#x3C;script type=&#x22;text/javascript&#x22;&#x3E;
+$(function(){
+        $(&#x27;#form2&#x27;).imageUploadForm({
+            &#x27;uploadUrl&#x27;: &#x27;#&#x27;,
+            &#x27;deleteUrl&#x27;: &#x27;#&#x27;,
+        });
+    });
+&#x3C;/script&#x3E;
+
+&#x3C;div id=&#x22;form2&#x22;&#x3E;
+    &#x3C;img data-id="12" src="img/Kitten-Kiss.jpg"&#x3E;
+    &#x3C;img data-id="56" src="img/90.jpeg"&#x3E;
+    &#x3C;img data-id="72" src="img/CwqrTMsWgAA11-B.jpg"&#x3E;
+&#x3C;/div&#x3E;</pre>
+            </div>
+          </div>
+
+
+        </div>
+    </div>
+</body>
+</html>

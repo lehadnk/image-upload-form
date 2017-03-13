@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bootstrap ImageUploadForm Test</title>
+
+    <link type="text/css" rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="../../bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../../bower_components/jquery-ui/jquery-ui.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="../../src/ImageUploadForm.css">
+
+    <script type="text/javascript" src="../../src/ImageUploadForm.js"></script>
+    <script type="text/javascript" src="../../src/renderers/Bootstrap.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $('#form1').imageUploadForm();
+            $('#form2').imageUploadForm({
+                'text': {
+                    'formHeader': 'Загрузка изображений',
+                    'deleteButton': 'Удалить'
+                },
+                'uploadUrl': 'http://test-server.local/',
+                'deleteUrl': 'http://test-server.local/',
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="wrap">
+        <nav class="navbar-inverse navbar-fixed-top navbar">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Image Upload Form</a>
+                </div>
+                <div id="w0-collapse" class="collapse navbar-collapse">
+                    <ul id="w1" class="navbar-nav navbar-right nav">
+                        <li><a href="/">Main Navigation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container" style="margin-top: 70px; margin-bottom: 10px;">
+
+
+
+            <div id="form1"></div>
+
+            <div id="form2">
+                <img data-id="12" src="../../Design/img/Kitten-Kiss.jpg">
+                <img data-id="56" src="../../Design/img/90.jpeg">
+                <img data-id="56" src="../../Design/img/CwqrTMsWgAA11-B.jpg">
+            </div>
+
+
+
+        </div>
+    </div>
+</body>
+</html>

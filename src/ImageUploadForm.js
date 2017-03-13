@@ -61,7 +61,7 @@
      * @param text
      */
     function displayError(container, title, text) {
-        var boxBody = $(getImageContainer(container)).parent();
+        var boxBody = $(getImageContainer(container));
         $.fn.imageUploadForm.renderError(boxBody, title, text);
     }
 
@@ -107,7 +107,7 @@
 
         var url = $(this).data('url');
 
-        var placeholderContainer = createThumbContainer(getImageContainer(this));
+        var placeholderContainer = createThumbContainer(getImageContainer(this), 0.4);
         addLoadingOverlay(placeholderContainer);
 
         $.ajax({
@@ -129,6 +129,7 @@
                 removeLoadingOverlay(placeholderContainer);
                 addImageToThumbContainer(placeholderContainer, dataToImg(data));
                 updateTotalText(placeholderContainer);
+                placeholderContainer.fadeTo('slow', 1);
             },
             error: function() {
                 displayError(placeholderContainer, 'Error!', 'Internal server error.');
@@ -166,7 +167,7 @@
         var url = $(this).data('url');
 
         var container = $(this).parent();
-        addLoadingOverlay(container);
+        addLoadingOverlay(container.parent());
 
         $.ajax({
             url : url,
@@ -177,7 +178,7 @@
             },
             dataType: 'json',
             success : function(data) {
-                removeLoadingOverlay(container);
+                removeLoadingOverlay(container.parent());
                 if (data.error) {
                     displayError(container, 'Error!', data.error);
                 }
@@ -236,7 +237,7 @@
      */
     function updateTotalText(element) {
         var footerHint = $($(element).parents('.'+serviceVars.pluginContainer)[0]).find('.'+serviceVars.footerHintClass)[0];
-        var imagesCnt = $(getImageContainer(element)).children().length - 1;
+        var imagesCnt = $(getImageContainer(element)).children('.'+serviceVars.thumbContainer).length;
 
         $(footerHint).html(imagesCnt + ' images total');
     }
@@ -246,11 +247,17 @@
      * @param container
      * @returns {*}
      */
-    function createThumbContainer(container) {
+    function createThumbContainer(container, fadeTo) {
         $(container).parent().show();
         var newImageContainer = $(container).children('.'+serviceVars.imagePatternClass).clone(true);
         newImageContainer.appendTo(container);
-        newImageContainer.removeClass(serviceVars.imagePatternClass).hide().fadeIn('slow');
+        newImageContainer.removeClass(serviceVars.imagePatternClass).hide();
+        if (fadeTo) {
+            newImageContainer.fadeTo('slow', fadeTo);
+        } else {
+            newImageContainer.fadeIn('slow');
+        }
+        newImageContainer.addClass(serviceVars.thumbContainer);
 
         return newImageContainer;
     }
@@ -270,6 +277,7 @@
      * @param container
      */
     function addLoadingOverlay(container) {
+        container.addClass('iuf-has-overlay');
         $.fn.imageUploadForm.addLoadingOverlay(container);
     }
 
@@ -278,6 +286,7 @@
      * @param container
      */
     function removeLoadingOverlay(container) {
+        container.removeClass('iuf-has-overlay');
         $(container).children('.'+$.fn.imageUploadForm.serviceVars.overlay).remove();
     }
 
@@ -320,7 +329,7 @@
         // </Header>
 
         // <Body>
-            var body = $.fn.imageUploadForm.renderBody(container, settings, deleteImage, preloadImages);
+            var body = $.fn.imageUploadForm.renderBody(container, settings, deleteImage);
 
             if (preloadImages.length == 0) {
                 $(body).hide();
@@ -410,7 +419,6 @@
      * @param container
      * @param settings
      * @param deleteImage
-     * @param preloadImages
      */
     $.fn.imageUploadForm.renderBody = noRendererError;
 

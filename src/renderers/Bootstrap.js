@@ -40,7 +40,27 @@ function createElement(container, element, htmlClass) {
      */
 $.fn.imageUploadForm.getStyles = function() {
     return {
-        'container': ''
+        'container': 'panel panel-default',
+        'header': {
+            'container': 'panel-heading',
+            'header': 'iuf-bootstrap-header pull-left',
+            'input': 'btn btn-primary btn-sm pull-right'
+        },
+        'content': {
+            'container': 'panel-body',
+            'row': 'row',
+            'thumb': {
+                'container': 'col-lg-3 col-md-6 col-xs-12',
+                'thumbContainer': 'thumbnail iuf-bootstrap-card iuf-preview-container',
+                'image': 'iuf-thumb-image',
+                'footerContainer': 'panel-body iuf-thumb-footer',
+                'deleteButton': 'btn btn-danger'
+            }
+        },
+        'footer': {
+            'container': 'panel-footer',
+            'infoBlock': 'help-block'
+        }
     };
 }
 
@@ -59,7 +79,17 @@ $.fn.imageUploadForm.getStyles = function() {
  * @param uploadImage
  */
 $.fn.imageUploadForm.renderHeader = function(container, settings, uploadImage) {
+    var styles = settings.style;
 
+    var header = createElement(container, '<div></div>', styles.header.container);
+    var row = createElement(header, '<div></div>', 'row');
+    var col = createElement(row, '<div></div>', 'col-sm-12');
+
+    createElement(col, '<h3>'+settings.text.formHeader+'</h3>', styles.header.header);
+
+    var uploadButton = createElement(col, '<input type="file"></input>', styles.header.input);
+    $(uploadButton).on('change', uploadImage);
+    $(uploadButton).data('url', settings.uploadUrl);
 }
 
 /**
@@ -81,11 +111,22 @@ $.fn.imageUploadForm.renderHeader = function(container, settings, uploadImage) {
  * @param deleteImage
  */
 $.fn.imageUploadForm.renderBody = function(container, settings, deleteImage) {
-    // .addClass($.fn.imageUploadForm.serviceVars.imageContainerClass);
-    // .addClass($.fn.imageUploadForm.serviceVars.imagePatternClass);
-    // .addClass($.fn.imageUploadForm.serviceVars.imageThumbContainer);
+    var styles = settings.style;
+    var serviceVars = $.fn.imageUploadForm.serviceVars;
 
-    // return bodyContainer;
+    var bodyContainer = createElement(container, '<div></div>', styles.content.container).addClass(serviceVars.imageContainerClass);
+
+    // Image Pattern
+        var imagePatternContainer = createElement(bodyContainer, '<div></div>', styles.content.thumb.container).addClass(serviceVars.imagePatternClass);
+        createElement(imagePatternContainer, '<div></div>', styles.content.thumb.thumbContainer).addClass(serviceVars.imageThumbContainer);
+
+        var footerContainer = createElement(imagePatternContainer, '<div></div>', styles.content.thumb.footerContainer);
+        var deleteButton = createElement(footerContainer, '<button>'+settings.text.deleteButton+'</button>', styles.content.thumb.deleteButton);
+        deleteButton.on('click', deleteImage);
+        deleteButton.data('url', settings.deleteUrl);
+    // !Image Pattern
+
+    return bodyContainer;
 }
 
 /**
@@ -102,9 +143,10 @@ $.fn.imageUploadForm.renderBody = function(container, settings, deleteImage) {
  * @returns {*}
  */
 $.fn.imageUploadForm.renderFooter = function(container, settings) {
-    // .addClass($.fn.imageUploadForm.serviceVars.footerHintClass)
+    var footerContainer = createElement(container, '<div></div>', settings.style.footer.container);
+    createElement(footerContainer, '<p></p>', settings.style.footer.infoBlock).addClass($.fn.imageUploadForm.serviceVars.footerHintClass);
 
-    // return footerContainer;
+    return footerContainer;
 }
 
 /**
@@ -116,12 +158,18 @@ $.fn.imageUploadForm.renderFooter = function(container, settings) {
  * @param text
  */
 $.fn.imageUploadForm.renderError = function(container, title, text) {
-    // var removeErrorMessage = function() {
-    //     $(errorContainer).hide('fade', function() {
-    //         $(errorContainer).remove();
-    //     });
-    // };
-    // setTimeout(removeErrorMessage, 3000);
+    var errorContainer = $('<div></div>').prependTo(container).addClass('alert alert-danger alert-dismissible').hide().show('fade');
+
+    var removeErrorMessage = function() {
+        $(errorContainer).hide('fade', function() {
+            $(errorContainer).remove();
+        });
+    };
+    setTimeout(removeErrorMessage, 3000);
+
+    createElement(errorContainer, '<button>×</button>', 'close').on('click', removeErrorMessage);
+    createElement(errorContainer, '<h4><i class="icon fa fa-ban"></i> '+title+'</h4>', '');
+    errorContainer.append(text);
 }
 
 /**
@@ -133,5 +181,5 @@ $.fn.imageUploadForm.renderError = function(container, title, text) {
  * @param container
  */
 $.fn.imageUploadForm.addLoadingOverlay = function(container, title, text) {
-    // addClass($.fn.imageUploadForm.serviceVars.overlay);
+    createElement(container, '<div></div>', 'iuf-spinner').addClass($.fn.imageUploadForm.serviceVars.overlay);
 }
