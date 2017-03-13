@@ -187,7 +187,7 @@
                 }
             },
             error: function() {
-                removeLoadingOverlay(container);
+                removeLoadingOverlay(container.parent());
                 displayError(container, 'Error!', 'Internal server error.');
             },
             timeout: 15000
